@@ -1,31 +1,18 @@
 package com.javaus.agenda.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.javaus.agenda.dto.UsuarioDTO;
+import com.javaus.agenda.models.Usuario;
 
-import com.javaus.agenda.controllers.resources.dto.UsuarioDTO;
-import com.javaus.agenda.models.entity.Usuario;
-import com.javaus.agenda.models.repository.UsuarioRepository;
+public interface UsuarioService {
 
-@Service
-public class UsuarioService {
+	//Usuario autenticar(String email, String senha);
 	
-	@Autowired
-	private UsuarioRepository usuarioRepositoriy;
+	Usuario salvar(Usuario usuario);
 	
+	Usuario converteUsuarioDTOparaUsuario(UsuarioDTO dto);
 	
-	public Usuario insert(Usuario obj){
-		return usuarioRepositoriy.insert(obj);
-	}
+	void validarEmail(String email);
 	
- 
-	public Usuario converteUsuarioDTOparaUsuario(UsuarioDTO dto){
-		return  Usuario.builder()
-				.id(dto.getId())
-				.nome(dto.getNome())
-				.email(dto.getEmail())
-				.senha(dto.getSenha())
-				.build();
-	}
+	//Optional<Usuario> obterPorId(Long id);
 
 }
