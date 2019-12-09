@@ -8,7 +8,7 @@ import com.javaus.agenda.dto.UsuarioDTO;
 import com.javaus.agenda.models.Usuario;
 import com.javaus.agenda.repository.UsuarioRepository;
 import com.javaus.agenda.services.UsuarioService;
-import com.javaus.agenda.services.exceptions.RegraNegocioException;
+import com.javaus.agenda.services.exceptions.ObjetoJaExisteCadastradoException;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -20,7 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Transactional 	
 	public Usuario salvar(Usuario usuario) {
-		// Garante que criacao de obj e não uma atuliazação
+		// Garante a criacao de um novo objeto
 		usuario.setId(null);
 		
         validarEmail(usuario.getEmail());
@@ -33,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public void validarEmail(String email) {
         boolean existe = usuarioRepositoriy.existsByEmail(email);
         if(existe) {
-        	throw new RegraNegocioException("Já existe um usuário cadastrado com este email.");
+        	throw new ObjetoJaExisteCadastradoException("Já existe um usuário cadastrado com este email.");
         }
 		
 	}
