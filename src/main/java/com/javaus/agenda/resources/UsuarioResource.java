@@ -2,6 +2,8 @@ package com.javaus.agenda.resources;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,11 +28,11 @@ public class UsuarioResource {
 	
 	/** 
 	 * UsuarioDTO dto - Obj Json que sera convertido para Obj Java pela anotation @RequestBody
-	 * 
+	 * @Valid - Para que as anotation do bean validation no DTO sejam executadas
 	 */
 	@PostMapping
 	@ResponseBody
-	public ResponseEntity salvar(@RequestBody UsuarioDTO dto){
+	public ResponseEntity salvar(@Valid @RequestBody UsuarioDTO dto){
 		
 	 try {
 			 Usuario obj = usuarioService.converteUsuarioDTOparaUsuario(dto);
