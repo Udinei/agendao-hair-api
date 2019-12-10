@@ -31,7 +31,6 @@ public class UsuarioResource {
 	 * @Valid - Para que as anotation do bean validation no DTO sejam executadas
 	 */
 	@PostMapping
-	@ResponseBody
 	public ResponseEntity salvar(@Valid @RequestBody UsuarioDTO dto){
 		
 	 try {

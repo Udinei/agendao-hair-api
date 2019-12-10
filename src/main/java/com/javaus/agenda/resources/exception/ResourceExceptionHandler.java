@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -25,18 +27,31 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> objectNotFound(AppAgendaObjectNotFoundException e, HttpServletRequest request) {
 		
 		// preenche o objeto StandardError com as informações de erro fornecidas pelo request, e pelo metodo que lancou o erro, e o momento
-		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), request.getRequestURI());
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", e.getMessage(), e.getClass().toString(),  request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
 	@ExceptionHandler(ObjetoJaExisteCadastradoException.class)
 	public ResponseEntity<StandardError> objetoJaCadastrado(ObjetoJaExisteCadastradoException e, HttpServletRequest request) {
-		  
-    
+   
 		// preenche o objeto StandardError com as informações de erro fornecidas pelo request, e pelo metodo que lancou o erro, e o momento
-		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(), "Objeto já existe cadastrado", e.getMessage(), request.getRequestURI());
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(), "Objeto já existe cadastrado", e.getMessage(), e.getClass().toString(),  request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
 	}
 	
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
 	
+			
+		ValidationError err = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", e.getMessage(), e.getClass().toString(), request.getRequestURI());
+		
+		for (FieldError x : e.getBindingResult().getFieldErrors()) {
+			err.addError(x.getField(), x.getDefaultMessage());
+		}
+
+		
+		
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
+	}
 }

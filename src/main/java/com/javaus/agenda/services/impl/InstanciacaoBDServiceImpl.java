@@ -29,7 +29,7 @@ public class InstanciacaoBDServiceImpl {
 		
 	    usuarioRepository.deleteAll();
 		
-		Usuario user_1 = criarUsuario("usuarioddddd");
+		Usuario user_1 = criarUsuario("usuario1");
 		Usuario user_2 = criarUsuario("usuario2");
 		
 		usuarioRepository.saveAll(Arrays.asList(user_1, user_2));
